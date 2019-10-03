@@ -102,7 +102,7 @@ def reset(doctype):
 def get_users_with_role(role):
 	frappe.only_for("System Manager")
 
-	return [p[0] for p in frappe.db.sql("""select distinct tabUser.name
+	return [p for p in frappe.db.sql("""select distinct tabUser.name, tabUser.first_name
 		from `tabHas Role`, tabUser where
 			`tabHas Role`.role=%s
 			and tabUser.name != "Administrator"
