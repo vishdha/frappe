@@ -3,8 +3,11 @@
 # See license.txt
 from __future__ import unicode_literals
 
+import json
+import unittest
+
 import frappe
-import unittest, json
+from frappe.utils.data import is_html
 
 # test_records = frappe.get_test_records('Auto Email Report')
 
@@ -25,8 +28,7 @@ class TestAutoEmailReport(unittest.TestCase):
 		)).insert()
 
 		data = auto_email_report.get_report_content()
-		self.assertTrue('<td>DocShare</td>' in data)
-		self.assertTrue('<td>Core</td>' in data)
+		self.assertTrue(is_html(data))
 
 		auto_email_report.format = 'CSV'
 
@@ -36,4 +38,3 @@ class TestAutoEmailReport(unittest.TestCase):
 		auto_email_report.format = 'XLSX'
 
 		data = auto_email_report.get_report_content()
-
