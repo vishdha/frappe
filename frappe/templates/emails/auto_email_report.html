@@ -39,7 +39,8 @@
 					</td>
 				{% else %}
 					<td {{- get_alignment(col) }}>
-						{% if col.fieldtype == "Link" and col.options %}
+						<!-- TODO: Fixed in v12; remove after upgrade -->
+						{% if col.fieldtype == "Link" and col.options and row[col.fieldname] %}
 							{{- frappe.utils.get_link_to_form(col.options, row[col.fieldname]) }}
 						{% else %}
 							{{- frappe.format(row[col.fieldname], col, row) -}}
