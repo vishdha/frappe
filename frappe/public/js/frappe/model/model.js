@@ -519,7 +519,8 @@ $.extend(frappe.model, {
 
 	delete_doc: function(doctype, docname, callback) {
 		frappe.confirm(__("Permanently delete {0}?", [docname]), function() {
-			return frappe.call({
+			//original code
+			/*return frappe.call({
 				method: 'frappe.client.delete',
 				args: {
 					doctype: doctype,
@@ -532,9 +533,41 @@ $.extend(frappe.model, {
 						if(callback) callback(r,rt);
 					}
 				}
-			})
+			})*/
+			var d = new frappe.ui.Dialog({
+			title: __("Delete {0}", [__(docname)]),
+			/*fields: [
+				{label:__("Allow Force Delete"), fieldtype:"Check", fieldname:"force_delete"},
+			]*/
+
+
+		});
+
+		d.set_primary_action(__("Force Delete"), function() {
+			var args = d.get_values();
+			if(!args) return;
+			return frappe.call({
+				method: 'frappe.client.delete',
+				args: {
+					doctype: doctype,
+					name: docname
+				},
+				btn: d.get_primary_btn(),
+				callback: function(r, rt) {
+					if(!r.exc) {
+						frappe.utils.play_sound("delete");
+						frappe.model.clear_doc(doctype, docname);
+						if(callback) callback(r,rt);
+					}
+				}
+			});
+		});
+		d.show();
+
 		})
 	},
+
+
 
 	rename_doc: function(doctype, docname, callback) {
 		var d = new frappe.ui.Dialog({
