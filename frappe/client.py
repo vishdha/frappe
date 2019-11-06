@@ -229,12 +229,13 @@ def cancel(doctype, name):
 	return wrapper.as_dict()
 
 @frappe.whitelist()
-def delete(doctype, name, force=False):
+def delete(doctype, name, force_delete=False):
+	print("force_delete", force_delete)
 	'''Delete a remote document
 
 	:param doctype: DocType of the document to be deleted
 	:param name: name of the document to be deleted'''
-	frappe.delete_doc(doctype, name, ignore_missing=False)
+	frappe.delete_doc(doctype, name, force_delete=force_delete, ignore_missing=False)
 
 @frappe.whitelist()
 def set_default(key, value, parent=None):

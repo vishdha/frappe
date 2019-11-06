@@ -52,6 +52,7 @@ def execute_cmd(cmd, from_async=False):
 		method = method.queue
 
 	is_whitelisted(method)
+	print("************", frappe.form_dict)
 
 	return frappe.call(method, **frappe.form_dict)
 

@@ -854,7 +854,8 @@ class Document(BaseDocument):
 
 	def delete(self):
 		"""Delete document."""
-		frappe.delete_doc(self.doctype, self.name, flags=self.flags)
+		print("document call")
+		frappe.delete_doc(self.doctype, self.name, self.force_delete, flags=self.flags)
 
 	def run_before_save_methods(self):
 		"""Run standard methods before  `INSERT` or `UPDATE`. Standard Methods are:

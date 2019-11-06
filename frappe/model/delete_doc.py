@@ -14,11 +14,12 @@ from frappe.model.naming import revert_series_if_last
 from frappe.utils.global_search import delete_for_document
 from six import string_types, integer_types
 
-def delete_doc(doctype=None, name=None, force=0, ignore_doctypes=None, for_reload=False,
+def delete_doc(doctype=None, name=None, force=0, force_delete=False, ignore_doctypes=None, for_reload=False,
 	ignore_permissions=False, flags=None, ignore_on_trash=False, ignore_missing=True):
 	"""
 		Deletes a doc(dt, dn) and validates if it is not submitted and not linked in a live record
 	"""
+	print("delete doc force_delete", force_delete)
 	if not ignore_doctypes: ignore_doctypes = []
 
 	# get from form

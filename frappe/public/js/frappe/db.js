@@ -79,6 +79,7 @@ frappe.db = {
 		});
 	},
 	delete_doc: function(doctype, name) {
+		console.log("Db.js")
 		return new Promise(resolve => {
 			frappe.call('frappe.client.delete', { doctype, name }, r => resolve(r.message));
 		});

@@ -762,18 +762,19 @@ def get_meta_module(doctype):
 	import frappe.modules
 	return frappe.modules.load_doctype_module(doctype)
 
-def delete_doc(doctype=None, name=None, force=0, ignore_doctypes=None, for_reload=False,
+def delete_doc(doctype=None, name=None, force=0, force_delete=False, ignore_doctypes=None, for_reload=False,
 	ignore_permissions=False, flags=None, ignore_on_trash=False, ignore_missing=True):
 	"""Delete a document. Calls `frappe.model.delete_doc.delete_doc`.
-
+	
 	:param doctype: DocType of document to be delete.
 	:param name: Name of document to be delete.
 	:param force: Allow even if document is linked. Warning: This may lead to data integrity errors.
 	:param ignore_doctypes: Ignore if child table is one of these.
 	:param for_reload: Call `before_reload` trigger before deleting.
 	:param ignore_permissions: Ignore user permissions."""
+	print("force init", force_delete)
 	import frappe.model.delete_doc
-	frappe.model.delete_doc.delete_doc(doctype, name, force, ignore_doctypes, for_reload,
+	frappe.model.delete_doc.delete_doc(doctype, name, force, force_delete, ignore_doctypes, for_reload,
 		ignore_permissions, flags, ignore_on_trash, ignore_missing)
 
 def delete_doc_if_exists(doctype, name, force=0):
