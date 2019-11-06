@@ -7,6 +7,7 @@ import frappe
 import frappe.model.meta
 from frappe.model.dynamic_links import get_dynamic_link_map
 import frappe.defaults
+from frappe.utils import cint
 from frappe.utils.file_manager import remove_all
 from frappe.utils.password import delete_all_passwords_for
 from frappe import _
@@ -14,7 +15,7 @@ from frappe.model.naming import revert_series_if_last
 from frappe.utils.global_search import delete_for_document
 from six import string_types, integer_types
 
-def delete_doc(doctype=None, name=None, force=0, force_delete=False, ignore_doctypes=None, for_reload=False,
+def delete_doc(doctype=None, name=None, force=0, force_delete=0, ignore_doctypes=None, for_reload=False,
 	ignore_permissions=False, flags=None, ignore_on_trash=False, ignore_missing=True):
 	"""
 		Deletes a doc(dt, dn) and validates if it is not submitted and not linked in a live record
@@ -81,9 +82,12 @@ def delete_doc(doctype=None, name=None, force=0, force_delete=False, ignore_doct
 					doc.run_method('on_change')
 
 				# check if links exist
-				if not force:
+				print("check link", force, force_delete)
+				if not force_delete:
+					print("Test")
 					check_if_doc_is_linked(doc)
 					check_if_doc_is_dynamically_linked(doc)
+
 
 			update_naming_series(doc)
 			delete_from_table(doctype, name, ignore_doctypes, doc)

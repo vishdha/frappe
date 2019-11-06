@@ -16,7 +16,7 @@ def rename_doc(doctype, old, new, force=False, merge=False, ignore_permissions=F
 		Renames a doc(dt, old) to doc(dt, new) and
 		updates all linked fields of type "Link"
 	"""
-	print("merge", merge)
+	
 	if not frappe.db.exists(doctype, old):
 		return
 
