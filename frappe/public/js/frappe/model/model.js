@@ -520,41 +520,52 @@ $.extend(frappe.model, {
 	delete_doc: function(doctype, docname, callback) {
 		// To delete All linked doc associate with doctype
 		frappe.confirm(__("Permanently delete {0}?", [docname]), function() {
-			//original code
-			/*return frappe.call({
-				method: 'frappe.client.delete',
-				args: {
-					doctype: doctype,
-					name: docname
-				},
-				callback: function(r, rt) {
-					if(!r.exc) {
-						frappe.utils.play_sound("delete");
-						frappe.model.clear_doc(doctype, docname);
-						if(callback) callback(r,rt);
-					}
-				}
-			})*/
-			var d = new frappe.ui.Dialog({
+		
+		/*var linked_with =  new frappe.ui.form.LinkedWith({
+				doctype: doctype
+			});
+
+			var isLinked = linked_with.get_linked_doctypes();*/
+			// isLinked is flag. It will set if doctype is linked with other doctype.
+			var isLinked = 1; 
+			if(isLinked){
+				var d = new frappe.ui.Dialog({
 				title: __("Delete {0}", [__(docname)]),
 				fields: [
 					{label:__("Allow Force Delete"),
 					fieldtype:"Check",
 					fieldname:"force_delete"},
 				]
-			});
-			d.set_primary_action(__("Force Delete"), function() {
-				var args = d.get_values();
-				console.log('args', args);
-				if(!args) return;
+				});
+				d.set_primary_action(__("Force Delete"), function() {
+					var args = d.get_values();
+					if(!args) return;
+					return frappe.call({
+						method: 'frappe.client.delete',
+						args: {
+							doctype: doctype,
+							name: docname,
+							"force_delete": args.force_delete
+						},
+						btn: d.get_primary_btn(),
+						callback: function(r, rt) {
+							if(!r.exc) {
+								frappe.utils.play_sound("delete");
+								frappe.model.clear_doc(doctype, docname);
+								if(callback) callback(r,rt);
+							}
+						}
+					});
+				});
+				d.show();
+				}
+			else {
 				return frappe.call({
 					method: 'frappe.client.delete',
 					args: {
 						doctype: doctype,
-						name: docname,
-						"force_delete": args.force_delete
+						name: docname
 					},
-					btn: d.get_primary_btn(),
 					callback: function(r, rt) {
 						if(!r.exc) {
 							frappe.utils.play_sound("delete");
@@ -562,9 +573,8 @@ $.extend(frappe.model, {
 							if(callback) callback(r,rt);
 						}
 					}
-				});
-			});
-			d.show();
+				})
+			}
 		});
 	},
 

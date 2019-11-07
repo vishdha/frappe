@@ -20,7 +20,7 @@ def delete_doc(doctype=None, name=None, force=0, force_delete=0, ignore_doctypes
 	"""
 		Deletes a doc(dt, dn) and validates if it is not submitted and not linked in a live record
 	"""
-	print("delete doc force_delete", force_delete)
+
 	if not ignore_doctypes: ignore_doctypes = []
 
 	# get from form
@@ -82,11 +82,10 @@ def delete_doc(doctype=None, name=None, force=0, force_delete=0, ignore_doctypes
 					doc.run_method('on_change')
 
 				# check if links exist
-				print("check link", force, force_delete)
-				if not force_delete:
-					print("Test")
-					check_if_doc_is_linked(doc)
-					check_if_doc_is_dynamically_linked(doc)
+				if not force:
+					check_if_doc_is_linked(doc, force_delete=force_delete)
+					check_if_doc_is_dynamically_linked(doc, force_delete=force_delete)
+
 
 
 			update_naming_series(doc)
@@ -186,10 +185,11 @@ def check_permission_and_not_submitted(doc):
 		frappe.msgprint(_("{0} {1}: Submitted Record cannot be deleted.").format(_(doc.doctype), doc.name),
 			raise_exception=True)
 
-def check_if_doc_is_linked(doc, method="Delete"):
+def check_if_doc_is_linked(doc, force_delete=0, method="Delete"):
 	"""
 		Raises excption if the given doc(dt, dn) is linked in another record.
 	"""
+
 	from frappe.model.rename_doc import get_link_fields
 	link_fields = get_link_fields(doc.doctype)
 	link_fields = [[lf['parent'], lf['fieldname'], lf['issingle']] for lf in link_fields]
@@ -215,13 +215,17 @@ def check_if_doc_is_linked(doc, method="Delete"):
 					continue
 				else:
 					reference_docname = item.parent or item.name
-					raise_link_exists_exception(doc, linked_doctype, reference_docname)
-
+					#if force delete not set on Delete dialog box then raise exception
+					#but problem is that if force=1 then it will not raise exception !!!Danger!!!
+					if not force_delete:
+						raise_link_exists_exception(doc, linked_doctype, reference_docname)
+					
 		else:
 			if frappe.db.get_value(link_dt, None, link_field) == doc.name:
-				raise_link_exists_exception(doc, link_dt, link_dt)
+				if not force_delete:
+					raise_link_exists_exception(doc, link_dt, link_dt)
 
-def check_if_doc_is_dynamically_linked(doc, method="Delete"):
+def check_if_doc_is_dynamically_linked(doc,force_delete=0, method="Delete"):
 	'''Raise `frappe.LinkExistsError` if the document is dynamically linked'''
 	for df in get_dynamic_link_map().get(doc.doctype, []):
 		if df.parent in ("Communication", "ToDo", "DocShare", "Email Unsubscribe", "Activity Log", 'File', 'Version', 'View Log'):
@@ -240,7 +244,8 @@ def check_if_doc_is_dynamically_linked(doc, method="Delete"):
 				# raise exception only if
 				# linked to an non-cancelled doc when deleting
 				# or linked to a submitted doc when cancelling
-				raise_link_exists_exception(doc, df.parent, df.parent)
+				if not force_delete:
+					raise_link_exists_exception(doc, df.parent, df.parent)
 		else:
 			# dynamic link in table
 			df["table"] = ", parent, parenttype, idx" if meta.istable else ""
@@ -255,8 +260,8 @@ def check_if_doc_is_dynamically_linked(doc, method="Delete"):
 					reference_doctype = refdoc.parenttype if meta.istable else df.parent
 					reference_docname = refdoc.parent if meta.istable else refdoc.name
 					at_position = "at Row: {0}".format(refdoc.idx) if meta.istable else ""
-
-					raise_link_exists_exception(doc, reference_doctype, reference_docname, at_position)
+					if not force_delete:
+						raise_link_exists_exception(doc, reference_doctype, reference_docname, at_position)
 
 def raise_link_exists_exception(doc, reference_doctype, reference_docname, row=''):
 	doc_link = '<a href="#Form/{0}/{1}">{1}</a>'.format(doc.doctype, doc.name)
