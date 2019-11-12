@@ -31,6 +31,9 @@
 					    {%= __("Reload") %}</a></li>
 					<li><a href="/index" target="_blank" rel="noopener noreferrer">
 						{%= __("View Website") %}</a></li>
+					<li class="navbar-toggle-full-width">
+						<a href="#" onclick="return false">{%= __("Toggle Full Width") %}</a>
+					</li>
 					<li><a href="#background_jobs">
 						{%= __("Background Jobs") %}</a></li>
 					<li class="divider"></li>
@@ -46,7 +49,7 @@
 					<span class="visible-xs visible-sm standard-image"
 						style="padding: 50% 7px; font-size: 17px; background-color: #fafbfc; font-weight: 100;">?</span>
 				</a>
-				<ul class="dropdown-menu" role="menu">
+				<ul class="dropdown-menu" id="toolbar-help" role="menu">
 					<li id="help-links"></li>
 					<li class="divider"></li>
 					<li class="divider documentation-links"></li>
