@@ -256,6 +256,15 @@ app_license = "{app_license}"
 # 	"Task": "{app_name}.task.get_dashboard_data"
 # }}
 
+
+
+# Exempt doctype for cancel
+# -----------------------
+#
+# cancel_exempt_doctypes = [
+#	"Payment Entry"
+# ]
+
 """
 
 desktop_template = """# -*- coding: utf-8 -*-
