@@ -4,9 +4,7 @@ from __future__ import unicode_literals
 
 import json
 from collections import defaultdict
-
 from six import string_types
-
 import frappe
 import frappe.desk.form.load
 import frappe.desk.form.meta
@@ -24,10 +22,7 @@ def get_submitted_linked_docs(doctype, name, docs=None):
 	linked_docs = get_linked_docs(doctype, name, linkinfo)
 
 	link_count = 0
-	CANCEL_EXEMPT_DOCTYPES = []
-
-	for doctype in frappe.get_hooks('cancel_exempt_doctypes'):
-		CANCEL_EXEMPT_DOCTYPES.extend(doctype)
+	cancel_exempt_doctypes = check_exempted_doctypes()
 
 	for link_doctype, link_names in linked_docs.items():
 		# skip non-submittable doctypes since they don't need to be cancelled
@@ -35,7 +30,7 @@ def get_submitted_linked_docs(doctype, name, docs=None):
 			continue
 
 		# skip other doctypes since they don't need to be cancelled
-		if link_doctype in CANCEL_EXEMPT_DOCTYPES:
+		if link_doctype in cancel_exempt_doctypes:
 			continue
 
 		for link in link_names:
@@ -50,6 +45,7 @@ def get_submitted_linked_docs(doctype, name, docs=None):
 			docs.append({
 				"doctype": link_doctype,
 				"name": link.name,
+				"docstatus": link.docstatus,
 				"link_count": links.get("count")
 			})
 
@@ -64,10 +60,45 @@ def get_submitted_linked_docs(doctype, name, docs=None):
 @frappe.whitelist()
 def cancel_all_linked_docs(docs):
 	docs = json.loads(docs)
+	docs = validate_linked_docs(docs)
 	for i, doc in enumerate(docs, 1):
 		frappe.publish_progress(percent=i * 100 / len(docs), title=_("Cancelling documents"))
 		linked_doc = frappe.get_doc(doc.get("doctype"), doc.get("name"))
 		linked_doc.cancel()
+
+def validate_linked_docs(docs):
+	""" Validate list of doctypes which return submitted and non-exempted doctypes. """
+
+	validated_docs = []
+	cancel_exempt_doctypes = check_exempted_doctypes()
+
+	for doc in docs:
+		# skip non-submittable doctypes since they don't need to be cancelled
+		if not frappe.get_meta(doc.get('doctype')).is_submittable:
+			continue
+
+		if doc.get('docstatus') != 1:
+			continue
+
+		# skip other doctypes since they don't need to be cancelled
+		if doc.get('doctype') in cancel_exempt_doctypes:
+			continue
+
+		validated_docs.sort(key=lambda doc: doc.get("link_count"))
+		validated_docs.append({
+			"doctype": doc.get('doctype'),
+			"name": doc.get('name'),
+			"docstatus": doc.get('docstatus'),
+			"link_count": doc.get('link_count')
+		})
+	return validated_docs
+
+def check_exempted_doctypes():
+	""" Return list of cancel exempted doctypes """
+	cancel_exempt_doctypes = []
+	for doctypes in frappe.get_hooks('cancel_exempt_doctypes'):
+		cancel_exempt_doctypes.append(doctypes)
+	return cancel_exempt_doctypes
 
 
 @frappe.whitelist()
