@@ -261,9 +261,7 @@ app_license = "{app_license}"
 # Exempt doctype for cancel
 # -----------------------
 #
-# cancel_exempt_doctypes = [
-#	"Payment Entry"
-# ]
+# auto_cancel_exempt_doctypes = ["Auto Repeat"]
 
 """
 
