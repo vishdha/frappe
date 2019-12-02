@@ -15,6 +15,20 @@ from frappe.modules import load_doctype_module
 
 @frappe.whitelist()
 def get_submitted_linked_docs(doctype, name, docs=None):
+	"""
+	Get all nested submitted linked doctype linkinfo
+
+	Arguments:
+		doctype (str) - The doctype for which get all linked doctypes
+		name (str) - The docname for which get all linked doctypes
+
+	Keyword Arguments:
+		docs [list of dict] - (Optional) Get list of dictionary for linked doctype (default: None)
+
+	Returns:
+		dict - Return list of documents and link count
+	"""
+
 	if not docs:
 		docs = []
 
@@ -52,6 +66,13 @@ def get_submitted_linked_docs(doctype, name, docs=None):
 
 @frappe.whitelist()
 def cancel_all_linked_docs(docs):
+	"""
+	Cancel all linked doctype
+
+	Arguments:
+		docs [list of dict] - It contains all list of dictionaries of a linked documents.
+	"""
+
 	docs = json.loads(docs)
 	for i, doc in enumerate(docs, 1):
 		if validate_linked_doc(doc) is True:
