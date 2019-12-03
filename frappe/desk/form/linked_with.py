@@ -70,7 +70,7 @@ def cancel_all_linked_docs(docs):
 	Cancel all linked doctype
 
 	Arguments:
-		docs [list of dict] - It contains all list of dictionaries of a linked documents.
+		docs (str) - JSON string containg list of all linked documents.
 	"""
 
 	docs = json.loads(docs)
