@@ -23,7 +23,7 @@ def get_submitted_linked_docs(doctype, name, docs=None):
 		name (str) - The docname for which get all linked doctypes
 
 	Keyword Arguments:
-		docs [list of dict] - (Optional) Get list of dictionary for linked doctype (default: None)
+		docs (list of dict) - (Optional) Get list of dictionary for linked doctype.
 
 	Returns:
 		dict - Return list of documents and link count
@@ -70,7 +70,7 @@ def cancel_all_linked_docs(docs):
 	Cancel all linked doctype
 
 	Arguments:
-		docs (str) - JSON string containg list of all linked documents.
+		docs (str) - JSON string containing list of all linked documents.
 	"""
 
 	docs = json.loads(docs)
@@ -110,7 +110,7 @@ def validate_linked_doc(docinfo):
 
 def get_exempted_doctypes():
 	"""
-		Get list of doctypes exempted from being auto-cancelled
+	Get list of doctypes exempted from being auto-cancelled
 	"""
 
 	auto_cancel_exempt_doctypes = []
@@ -290,10 +290,8 @@ def get_dynamic_linked_fields(doctype, without_ignore_user_permissions_enabled=F
 	for df in links:
 		if is_single(df.doctype): continue
 
-		# optimized to get both link exists and parenttype
-		possible_link = frappe.db.sql("""select distinct `{doctype_fieldname}`, parenttype
-			from `tab{doctype}` where `{doctype_fieldname}`=%s""".format(**df), doctype, as_dict=True)
-
+		# removed doctype_fieldname form fields it only check with child with parenttype
+		possible_link = frappe.get_all(df.doctype, filters={df.doctype_fieldname: doctype}, fields=['parenttype'])
 		if not possible_link: continue
 
 		for d in possible_link:
