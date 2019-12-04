@@ -116,7 +116,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		this.page_name = frappe.get_route_str();
 		this.report_name = this.route[1];
 		this.page_title = __(this.report_name);
-		this.show_save = false;
 		this.menu_items = this.get_menu_items();
 		this.datatable = null;
 		this.prepared_report_action = "New";
@@ -1068,7 +1067,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 									d.hide();
 								}
 							});
-							this.show_save = true;
 							this.set_menu_items();
 						}
 					})
@@ -1096,10 +1094,9 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 								args: {
 									reference_report: this.report_name,
 									report_name: values.report_name,
-									columns: this.columns
+									columns: this.get_visible_columns()
 								},
 								callback: function(r) {
-									this.show_save = false;
 									d.hide();
 									frappe.set_route('query-report', r.message);
 								}
@@ -1108,7 +1105,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 					});
 					d.show();
 				},
-				condition: () => this.show_save,
 				standard: true
 			},
 			{
