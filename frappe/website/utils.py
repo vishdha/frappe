@@ -33,7 +33,7 @@ def can_cache(no_cache=False):
 		return False
 	return not no_cache
 
-@frappe.whitelist()
+
 def get_comment_list(doctype, name):
 	comments = frappe.get_all('Comment',
 		fields=['name', 'creation', 'owner',
