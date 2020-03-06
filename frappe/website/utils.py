@@ -33,7 +33,7 @@ def can_cache(no_cache=False):
 		return False
 	return not no_cache
 
-
+@frappe.whitelist()
 def get_comment_list(doctype, name):
 	comments = frappe.get_all('Comment',
 		fields=['name', 'creation', 'owner',
@@ -50,8 +50,12 @@ def get_comment_list(doctype, name):
 				'sender_full_name as comment_by', 'content', 'recipients'],
 		filters=dict(
 			reference_doctype=doctype,
-			reference_name=name
-		))
+			reference_name=name,
+		),
+		or_filters=[
+			['recipients', 'like', '%{0}%'.format(frappe.session.user)],
+			['cc', 'like', '%{0}%'.format(frappe.session.user)],
+			['bcc', 'like', '%{0}%'.format(frappe.session.user)]])
 
 	return sorted((comments + communications), key=lambda comment: comment['creation'], reverse=True)
 
