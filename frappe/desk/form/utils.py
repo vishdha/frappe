@@ -57,14 +57,15 @@ def validate_link():
 		frappe.response['message'] = 'Ok'
 
 @frappe.whitelist()
-def add_comment(reference_doctype, reference_name, content, comment_email):
+def add_comment(reference_doctype, reference_name, content, comment_email,comment_by):
 	"""allow any logged user to post a comment"""
 	doc = frappe.get_doc(dict(
 		doctype = 'Comment',
 		reference_doctype = reference_doctype,
 		reference_name = reference_name,
 		comment_email = comment_email,
-		comment_type = 'Comment'
+		comment_type = 'Comment',
+		comment_by = comment_by
 	))
 	doc.content = extract_images_from_html(doc, content)
 	doc.insert(ignore_permissions = True)

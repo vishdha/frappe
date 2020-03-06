@@ -42,8 +42,10 @@ def get_comment_list(doctype, name):
 			reference_doctype=doctype,
 			reference_name=name,
 			comment_type='Comment',
-			owner=frappe.session.user
-		))
+		),
+		or_filters=[
+			[ 'owner' , '=' , frappe.session.user ],
+			[ 'published', '=', 1]])
 
 	communications = frappe.get_all("Communication",
 		fields=['name', 'creation', 'owner', 'owner as comment_email',
