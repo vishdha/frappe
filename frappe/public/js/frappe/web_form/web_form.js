@@ -20,7 +20,7 @@ export default class WebForm extends frappe.ui.FieldGroup {
 	make() {
 		super.make();
 		this.set_field_values();
-		this.set_editable_values();
+		this.toggle_form_edit();
 		if (this.introduction_text) this.set_form_description(this.introduction_text);
 		if (this.allow_print && !this.is_new) this.setup_print_button();
 		if (this.allow_delete && !this.is_new) this.setup_delete_button();
@@ -45,7 +45,7 @@ export default class WebForm extends frappe.ui.FieldGroup {
 		else return;
 	}
 
-	set_editable_values() {
+	toggle_form_edit() {
 		if (!this.is_new && this.allow_edit === 0) {
 			this.fields.map(field => this.set_df_property(field.fieldname, "read_only", 1));
 		}
