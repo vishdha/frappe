@@ -1566,14 +1566,23 @@ class extends Component {
 				const  alert   = // TODO: ellipses content
 				`
 				<span data-action="show-message" class="cursor-pointer">
-					<span class="indicator yellow"/> <b>${frappe.user.first_name(r.user)}</b>: ${r.content}
+					<span class="indicator yellow"/>
+						<span class="avatar avatar-small">
+							<span class="avatar-frame" style="background-image: url(&quot;${frappe.user.image(r.user)}&quot;)"></span>
+						</span>
+						<b>${frappe.user.first_name(r.user)}</b>: ${r.content}
 				</span>
 				`
-				frappe.show_alert(alert, 3, {
+				frappe.show_alert(alert, 15, {
 					"show-message": function (r) {
 						this.room.select(r.room)
 						this.base.firstChild._component.toggle()
 					}.bind(this, r)
+				})
+				frappe.notify(`${frappe.user.first_name(r.user)}`, {
+					body: r.content,
+					icon: frappe.user.image(r.user),
+					requireInteraction: true
 				})
 			}
 
