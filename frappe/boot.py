@@ -241,10 +241,17 @@ def add_home_page(bootinfo, docs):
 	docs.append(page)
 
 def add_timezone_info(bootinfo):
+	user = bootinfo.user.get("time_zone")
 	system = bootinfo.sysdefaults.get("time_zone")
-	import frappe.utils.momentjs
-	bootinfo.timezone_info = {"zones":{}, "rules":{}, "links":{}}
-	frappe.utils.momentjs.update(system, bootinfo.timezone_info)
+	if user and user != system:
+		import frappe.utils.momentjs
+		bootinfo.timezone_info = {"zones":{}, "rules":{}, "links":{}}
+
+		bootinfo.timezone_info[user] = frappe.utils.momentjs.update(user,
+			bootinfo.timezone_info)
+		bootinfo.timezone_info[system] = frappe.utils.momentjs.update(system,
+			bootinfo.timezone_info)
+
 
 def load_print(bootinfo, doclist):
 	print_settings = frappe.db.get_singles_dict("Print Settings")

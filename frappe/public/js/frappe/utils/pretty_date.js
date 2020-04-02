@@ -6,11 +6,16 @@ function prettyDate(time, mini) {
 	}
 	if ('moment' in window) { // use frappe.ImportError ;)
 		let ret;
-		if (frappe.sys_defaults && frappe.sys_defaults.time_zone) {
-			ret = moment.tz(time, frappe.sys_defaults.time_zone).locale(frappe.boot.lang).fromNow(mini);
+		if(frappe.boot.user.time_zone != sys_defaults.time_zone) {
+			return moment.tz(time, sys_defaults.time_zone).tz(frappe.boot.user.time_zone).fromNow(mini);
 		} else {
 			ret = moment(time).locale(frappe.boot.lang).fromNow(mini);
 		}
+		// if (frappe.sys_defaults && frappe.sys_defaults.time_zone) {
+		// 	ret = moment.tz(time, frappe.sys_defaults.time_zone).locale(frappe.boot.lang).fromNow(mini);
+		// } else {
+		// 	ret = moment(time).locale(frappe.boot.lang).fromNow(mini);
+		// }
 		if (mini) {
 			if (ret === moment().locale(frappe.boot.lang).fromNow(mini)) {
 				ret = __("now");
