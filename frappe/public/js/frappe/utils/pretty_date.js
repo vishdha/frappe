@@ -6,8 +6,8 @@ function prettyDate(time, mini) {
 	}
 	if ('moment' in window) { // use frappe.ImportError ;)
 		let ret;
-		if(frappe.boot.user.time_zone != sys_defaults.time_zone) {
-			return moment.tz(time, sys_defaults.time_zone).tz(frappe.boot.user.time_zone).fromNow(mini);
+		if(frappe.user_defaults.time_zone != frappe.sys_defaults.time_zone) {
+			return moment.tz(time, sys_defaults.time_zone).tz(frappe.user_defaults.time_zone).fromNow(mini);
 		} else {
 			ret = moment(time).locale(frappe.boot.lang).fromNow(mini);
 		}

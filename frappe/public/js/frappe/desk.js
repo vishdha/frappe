@@ -268,6 +268,7 @@ frappe.Application = Class.extend({
 		frappe.session.user_fullname = frappe.user_info().fullname;
 
 		frappe.user_defaults = frappe.boot.user.defaults;
+		frappe.user_defaults.time_zone = frappe.boot.user.time_zone;
 		frappe.user_roles = frappe.boot.user.roles;
 		frappe.sys_defaults = frappe.boot.sysdefaults;
 
