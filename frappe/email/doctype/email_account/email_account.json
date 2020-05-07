@@ -392,7 +392,7 @@
    "label": "Port"
   },
   {
-   "default": "1",
+   "default": "0",
    "fieldname": "create_contact",
    "fieldtype": "Check",
    "label": "Create Contacts from Incoming Emails"
