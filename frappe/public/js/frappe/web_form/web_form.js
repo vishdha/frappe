@@ -151,10 +151,10 @@ export default class WebForm extends frappe.ui.FieldGroup {
 						docname: response.message.name
 					},
 					callback : success => {
-						console.log(success, "done")
+						console.log(success, "File Uploaded Successfully")
 					},
 					always: error => {
-						console.log("Error", error)
+						console.log(error, "error")
 					}
 				});
 			},
