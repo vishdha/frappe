@@ -142,6 +142,21 @@ export default class WebForm extends frappe.ui.FieldGroup {
 					this.handle_success(response.message);
 					frappe.web_form.events.trigger('after_save');
 				}
+				frappe.call({
+					type: 'POST',
+					method: "frappe.handler.upload_file",
+					args: {
+						file_url : this.doc.attachment,
+						doctype: response.message.doctype,
+						docname: response.message.name
+					},
+					callback : success => {
+						console.log(success, "done")
+					},
+					always: error => {
+						console.log("Error", error)
+					}
+				});
 			},
 			always: function() {
 				window.saving = false;
