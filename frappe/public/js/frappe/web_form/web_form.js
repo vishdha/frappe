@@ -149,12 +149,6 @@ export default class WebForm extends frappe.ui.FieldGroup {
 						file_url : this.doc.attachment,
 						doctype: response.message.doctype,
 						docname: response.message.name
-					},
-					callback : success => {
-						console.log(success, "File Uploaded Successfully")
-					},
-					always: error => {
-						console.log(error, "error")
 					}
 				});
 			},
