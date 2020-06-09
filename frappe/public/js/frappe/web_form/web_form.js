@@ -146,7 +146,7 @@ export default class WebForm extends frappe.ui.FieldGroup {
 						type: 'POST',
 						method: "frappe.handler.upload_file",
 						args: {
-							file_url : response.message.attachment,
+							file_url: response.message.attachment,
 							doctype: response.message.doctype,
 							docname: response.message.name
 						}
