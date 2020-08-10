@@ -23,7 +23,7 @@ def get_submitted_linked_docs(doctype, name, is_submittable=True, skip_doctypes=
 		name (str) - The docname for which get all linked doctypes,
 
 	Keyword Arguments:
-		is_submittable (boolean) - Check for submittable and non-submittable doctype
+		is_submittable (boolean) - Check for only submittable doctype
 		skip_doctypes (list) - List of doctypes to skip for validate docs
 		docs (list of dict) - (Optional) Get list of dictionary for linked doctype.
 
@@ -83,7 +83,7 @@ def cancel_all_linked_docs(docs):
 			linked_doc.cancel()
 
 
-def validate_linked_doc(docinfo, is_submittable=None, skip_doctypes=None):
+def validate_linked_doc(docinfo, is_submittable=True, skip_doctypes=None):
 	"""
 	Validate a document to be submitted and non-exempted from auto-cancel.
 
@@ -93,6 +93,11 @@ def validate_linked_doc(docinfo, is_submittable=None, skip_doctypes=None):
 	Returns:
 		bool: True if linked document passes all validations, else False
 	"""
+		# skip doctype which is not needed for linking like ToDo, Activity Log
+	if skip_doctypes:
+		if docinfo.get('doctype') in skip_doctypes:
+			return False
+
 	if is_submittable == True:
 		# skip non-submittable doctypes since they don't need to be cancelled
 		if not frappe.get_meta(docinfo.get('doctype')).is_submittable:
@@ -105,11 +110,6 @@ def validate_linked_doc(docinfo, is_submittable=None, skip_doctypes=None):
 		# skip other doctypes since they don't need to be cancelled
 		auto_cancel_exempt_doctypes = get_exempted_doctypes()
 		if docinfo.get('doctype') in auto_cancel_exempt_doctypes:
-			return False
-
-	# skip doctype which is not needed for linking like ToDo, Activity Log
-	if skip_doctypes:
-		if docinfo.get('doctype') in skip_doctypes:
 			return False
 
 	return True
