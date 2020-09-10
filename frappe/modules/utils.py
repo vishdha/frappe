@@ -1,14 +1,17 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # MIT License. See license.txt
 
-from __future__ import unicode_literals, print_function
 """
 	Utilities for using modules
 """
-import frappe, os, json
+import json
+import os
+
+import frappe
 import frappe.utils
 from frappe import _
-from frappe.utils import cint
+from frappe.utils import cint, unique
+
 
 def export_module_json(doc, is_standard, module):
 	"""Make a folder for the given doc and add its json file (make it a standard
@@ -104,23 +107,22 @@ def sync_customizations_for_doctype(data, folder):
 	update_schema = False
 
 	def sync(key, custom_doctype, doctype_fieldname):
-		doctypes = list(set(map(lambda row: row.get(doctype_fieldname), data[key])))
+		doctypes = unique([row.get(doctype_fieldname) for row in data[key]])
 
-		# sync single doctype exculding the child doctype
-		def sync_single_doctype(doc_type):
+		# sync single doctype excluding the child doctype
+		def sync_doctype(doc_type):
 			def _insert(data):
 				if data.get(doctype_fieldname) == doc_type:
 					data['doctype'] = custom_doctype
 					doc = frappe.get_doc(data)
 					doc.db_insert()
 
-			if custom_doctype != 'Custom Field':
-				frappe.db.sql('delete from `tab{0}` where `{1}` =%s'.format(
-					custom_doctype, doctype_fieldname), doc_type)
+			frappe.db.sql('delete from `tab{0}` where `{1}` = %s'.format(
+				custom_doctype, doctype_fieldname), doc_type)
 
+			if custom_doctype != 'Custom Field':
 				for d in data[key]:
 					_insert(d)
-
 			else:
 				for d in data[key]:
 					field = frappe.db.get_value("Custom Field", {"dt": doc_type, "fieldname": d["fieldname"]})
@@ -135,8 +137,9 @@ def sync_customizations_for_doctype(data, folder):
 
 		for doc_type in doctypes:
 			# only sync the parent doctype and child doctype if there isn't any other child table json file
-			if doc_type == doctype or not os.path.exists(os.path.join(folder, frappe.scrub(doc_type)+".json")):
-				sync_single_doctype(doc_type)
+			doctype_json_file = os.path.exists(os.path.join(folder, frappe.scrub(doc_type) + ".json"))
+			if doc_type == doctype or not doctype_json_file:
+				sync_doctype(doc_type)
 
 	if data['custom_fields']:
 		sync('custom_fields', 'Custom Field', 'dt')
