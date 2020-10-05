@@ -231,8 +231,8 @@ def update_oauth_user(user, data, provider):
 		user = frappe.new_doc("User")
 		user.update({
 			"doctype":"User",
-			"first_name": get_first_name(data),
-			"last_name": get_last_name(data),
+			"first_name": get_first_name(data) or data["email"],
+			"last_name": get_last_name(data) or "",
 			"email": get_email(data),
 			"gender": (data.get("gender") or "").title(),
 			"enabled": 1,
