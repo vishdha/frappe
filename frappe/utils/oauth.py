@@ -232,7 +232,7 @@ def update_oauth_user(user, data, provider):
 		user.update({
 			"doctype":"User",
 			"first_name": get_first_name(data) or get_email(data),
-			"last_name": get_last_name(data) or "",
+			"last_name": get_last_name(data),
 			"email": get_email(data),
 			"gender": (data.get("gender") or "").title(),
 			"enabled": 1,
