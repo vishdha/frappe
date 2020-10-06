@@ -53,11 +53,8 @@ def authorize(*args, **kwargs):
 	params = get_urlparams_from_kwargs(kwargs)
 	request_url = urlparse(frappe.request.url)
 	success_url = request_url.scheme + "://" + request_url.netloc + "/api/method/frappe.integrations.oauth2.approve?" + params
-	if("redirect_uri" in frappe.form_dict):
-		failure_url = frappe.form_dict["redirect_uri"] + "?error=access_denied"
-	if("cmd" in frappe.form_dict):
-			failure_url = frappe.form_dict["cmd"] + "?error=access_denied"
-
+	failure_url = (frappe.form_dict["redirect_uri"]if ("redirect_uri" in frappe.form_dict) else frappe.form_dict["cmd"]) + "?error=access_denied"
+	
 	if frappe.session['user']=='Guest':
 		#Force login, redirect to preauth again.
 		frappe.local.response["type"] = "redirect"
