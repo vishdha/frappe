@@ -13,6 +13,7 @@
   "reference_docname",
   "section_break_7",
   "url",
+  "endpoint",
   "data",
   "output",
   "error"
@@ -94,10 +95,16 @@
    "fieldtype": "Code",
    "label": "URL",
    "read_only": 1
+  },
+  {
+   "fieldname": "endpoint",
+   "fieldtype": "Data",
+   "label": "Endpoint",
+   "read_only": 1
   }
  ],
  "in_create": 1,
- "modified": "2020-08-14 05:20:28.371522",
+ "modified": "2020-10-06 17:43:44.854237",
  "modified_by": "Administrator",
  "module": "Integrations",
  "name": "Integration Request",
