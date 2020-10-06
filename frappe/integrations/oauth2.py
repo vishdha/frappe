@@ -58,7 +58,7 @@ def authorize(*args, **kwargs):
 	if frappe.session['user']=='Guest':
 		#Force login, redirect to preauth again.
 		frappe.local.response["type"] = "redirect"
-		frappe.local.response["location"] = "/login?redirect-to=/api/method/frappe.integrations.oauth2.authorize?" + quote(params.replace("+"," "))
+		failure_url = (frappe.form_dict["redirect_uri"] or frappe.form_dict["cmd"] or "") + "?error=access_denied"
 
 	elif frappe.session['user']!='Guest':
 		try:
