@@ -4,7 +4,7 @@
 from __future__ import unicode_literals
 import frappe
 import frappe.utils
-from frappe.utils.oauth import login_via_oauth2, login_via_oauth2_id_token
+from frappe.utils.oauth import get_oauth2_authorize_url, login_via_oauth2, login_via_oauth2_id_token
 import json
 
 @frappe.whitelist(allow_guest=True)
@@ -34,6 +34,11 @@ def login_via_salesforce(code, state):
 @frappe.whitelist(allow_guest=True)
 def login_via_fairlogin(code, state):
 	login_via_oauth2("fairlogin", code, state, decoder=decoder_compat)
+
+@frappe.whitelist(allow_guest=True)
+def get_login_url(redirect_to=None, social_login_key_name="bloomstack"):
+	redirect_to = redirect_to.replace("&amp;", "&")
+	return get_oauth2_authorize_url(social_login_key_name, redirect_to)
 
 @frappe.whitelist(allow_guest=True)
 def custom(code, state):
