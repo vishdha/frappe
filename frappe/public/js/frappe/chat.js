@@ -23,7 +23,7 @@ import './utils/user'
  * try
  *      throw new frappe.Error("foobar")
  * catch (e)
- *		console.log(e.name)
+ *      console.log(e.name)
  * // returns "FrappeError"
  *
  * @see  https://stackoverflow.com/a/32749533
