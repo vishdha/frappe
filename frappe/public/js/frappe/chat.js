@@ -1610,7 +1610,6 @@ class extends Component {
 				setTimeout(() => this.room.update(room, { typing: null }), 5000)
 			}
 		})
-		
 		frappe.chat.message.on.create((r) => {
 			const { state } = this
 
