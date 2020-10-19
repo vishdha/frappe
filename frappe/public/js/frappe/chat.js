@@ -23,8 +23,7 @@ import './utils/user'
  * try
  *      throw new frappe.Error("foobar")
  * catch (e)
- *
- *      (e.name)
+ *		console.log(e.name)
  * // returns "FrappeError"
  *
  * @see  https://stackoverflow.com/a/32749533
@@ -2232,30 +2231,6 @@ class extends Component {
 				}
 			}
 		])
-
-		if ( frappe.session.user !== 'Guest' ) {
-			/**
-			 * Made some changes to fix the logic. But, for now commenting the following code
-			 * as it was firing twice.
-			if (props.messages) {
-				const messages = [...frappe._.as_array(props.messages)];
-				messages.reverse();
-				console.log("going through all");
-				for (const message of messages) {
-					const me = frappe.session.user === message.user;
-					if( me ) {
-						break;
-					}
-					if (!message.seen.includes(frappe.session.user)) {
-						console.log("fire seen !");
-						frappe.chat.message.seen(message.name)
-					} else {
-						break
-					}
-				}
-			}
-			 */
-		}
 
 		return (
 			h("div", { class: `panel panel-default
