@@ -908,7 +908,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			columns: columns
 		});
 		if (get_html) {
-			return html
+			return html;
 		}
 		frappe.render_pdf(html, print_settings);
 	}
