@@ -118,6 +118,9 @@ class LoginManager:
 				self.get_user_info()
 				self.make_session()
 				self.set_user_info()
+				
+		# run session start trigger. Different from creation as it happens on every request
+		self.run_trigger('on_session_start')
 
 	def login(self):
 		# clear cache
