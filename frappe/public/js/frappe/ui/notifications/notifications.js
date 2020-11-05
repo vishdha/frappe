@@ -428,20 +428,20 @@ frappe.ui.Notifications = class Notifications {
 		frappe.realtime.on('notification', (data) => {
 			this.$dropdown.find('.notifications-indicator').show();
 			this.update_dropdown();
-
-			if (data) {
-				let alert = {
-					message: data,
-					indicator: 'blue'
-				}
-
-				frappe.show_alert(alert);
-			}
 		});
 
 		frappe.realtime.on('indicator_hide', () => {
 			this.$dropdown.find('.notifications-indicator').hide();
 		});
+
+		frappe.realtime.on('show_notification_alert', (data) => {
+			let alert = {
+				message: data,
+				indicator: 'blue'
+			};
+
+			frappe.show_alert(alert);
+		})
 	}
 
 	setup_dropdown_events() {

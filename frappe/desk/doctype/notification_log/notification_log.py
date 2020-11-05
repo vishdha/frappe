@@ -10,9 +10,10 @@ from frappe.desk.doctype.notification_settings.notification_settings import (is_
 
 class NotificationLog(Document):
 	def after_insert(self):
-		frappe.publish_realtime('notification', message=self.subject, after_commit=True, user=self.for_user)
+		frappe.publish_realtime('notification', after_commit=True, user=self.for_user)
 		set_notifications_as_unseen(self.for_user)
 		if is_email_notifications_enabled_for_type(self.for_user, self.type):
+			frappe.publish_realtime('show_notification_alert', message=self.subject, after_commit=True, user=self.for_user)
 			send_notification_email(self)
 
 
