@@ -1258,7 +1258,7 @@ frappe.ui.form.Form = class FrappeForm {
 
 	set_root_read_only(fieldname) {
 		// read-only for root doctype group
-		if(this.meta.is_tree && (!this.doc[fieldname] && !this.is_new())) {
+		if (this.meta.is_tree && !this.doc[fieldname] && !this.is_new()) {
 			this.set_read_only();
 			this.set_intro(__("This is a root {0} and cannot be edited.", [this.doc.doctype.toLowerCase()]), true);
 		}
