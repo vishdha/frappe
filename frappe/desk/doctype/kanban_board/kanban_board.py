@@ -8,6 +8,7 @@ import json
 from frappe import _
 from frappe.model.document import Document
 from six import iteritems
+from frappe.desk.form.assign_to import add
 
 
 class KanbanBoard(Document):
@@ -209,3 +210,26 @@ def save_filters(board_name, filters):
 	'''Save filters silently'''
 	frappe.db.set_value('Kanban Board', board_name, 'filters',
 						filters, update_modified=False)
+
+@frappe.whitelist()
+def on_submit_kanban_dialog(docname, doctype, values):
+	"""To update and save kanban card from dialog box !"""
+	value = json.loads(values)
+	task_doc = frappe.get_doc(doctype, docname)
+	keys = value.keys()
+	updates = {}
+	args = {}
+
+	for key in keys:
+		if key in "assign_to":
+			for assignee in value[key]:
+				args = {
+					'doctype': doctype,
+					'name': docname,
+					'assign_to': assignee,
+				}
+				add(args)
+			continue
+		updates.update({key: value[key]})
+	task_doc.update(updates)
+	task_doc.save()
