@@ -1,0 +1,37 @@
+img.image {
+  border-radius: 14px;
+  width: 100%;
+  height: 250px;
+  margin-bottom: 20px;
+}
+
+.result {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+  margin-bottom: 3.75rem;
+}
+
+.result .text a {
+  font-size: 19px;
+  line-height: 22px;
+  color: #36414c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.detail, p.detail a, .blogger-detail a {
+  font-size: 16px;
+  line-height: 22px;
+  margin-bottom: 0;
+  color: #36414c;
+}
+
+@media screen and (max-width: 767px) {
+  img {
+    width: 100%;
+  }
+}
