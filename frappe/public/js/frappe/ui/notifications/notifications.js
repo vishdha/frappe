@@ -425,7 +425,7 @@ frappe.ui.Notifications = class Notifications {
 	}
 
 	setup_notification_listeners() {
-		frappe.realtime.on('notification', (data) => {
+		frappe.realtime.on('notification', () => {
 			this.$dropdown.find('.notifications-indicator').show();
 			this.update_dropdown();
 		});
