@@ -441,7 +441,7 @@ frappe.ui.Notifications = class Notifications {
 			};
 
 			frappe.show_alert(alert);
-		})
+		});
 	}
 
 	setup_dropdown_events() {
