@@ -8,8 +8,12 @@
 	</div>
 
 	<div>
-		{% if featured_blog.name == post.name %}
-		<div class="text"><a href="/{{ post.route }}">FEATURED: {{ post.title }}</a></div>
+		{% if featured_blog %}
+			{% if featured_blog.name == post.name %}
+			<div class="text"><a href="/{{ post.route }}">FEATURED: {{ post.title }}</a></div>
+			{% else %}
+			<div class="text"><a href="/{{ post.route }}">{{ post.title }}</a></div>
+			{% endif %}
 		{% else %}
 		<div class="text"><a href="/{{ post.route }}">{{ post.title }}</a></div>
 		{% endif %}

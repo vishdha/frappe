@@ -4,10 +4,12 @@
 {% endblock %}
 <header class="header" style="background-image: url({{background_image}});">
   <div class="container">
+    {% if featured_blog %}
     <div class="header-info">
       <p>Featured Article</p>
       <h2><a href="{{featured_blog.route}}">{{featured_blog.name}}</a></h2>
     </div>
+    {% endif %}
   </div>
   </header>
 {% endif %}

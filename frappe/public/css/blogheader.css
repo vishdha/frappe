@@ -15,11 +15,8 @@ header.header {
   margin-left: calc(-50vw + 50%);
   margin-bottom: 4.375rem;
   background-size: cover;
-}
-
-header.header .header-info {
-  padding-top: 9.0625rem;
-  padding-bottom: 7.75rem;
+  padding-top: 11.0625rem;
+  padding-bottom: 11.75rem;
 }
 
 header .header-info p {
