@@ -49,6 +49,8 @@ web_include_js = [
 	"website_script.js"
 ]
 
+blogs_page_heading_template = 'website/doctype/blog_post/templates/blog_post_header.html'
+
 web_include_css = []
 
 website_route_rules = [
