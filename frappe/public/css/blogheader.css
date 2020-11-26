@@ -2,6 +2,10 @@ body[data-path="blog"] .page-header, body[data-path="blog"] .page-breadcrumbs, b
   display: none;
 }
 
+.container.my-5 {
+  margin-top: 0!important;
+}
+
 .website-list .result {
   border-bottom: 0;
 }
