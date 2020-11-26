@@ -93,6 +93,7 @@ class BlogPost(WebsiteGenerator):
 
 
 def get_list_context(context=None):
+	website_settings = frappe.get_doc("Website Settings")
 	list_context = frappe._dict(
 		template = "templates/includes/blog/blog.html",
 		get_list = get_blog_list,
@@ -100,9 +101,9 @@ def get_list_context(context=None):
 		children = get_children(),
 		# show_search = True,
 		title = _('Blog'),
-		page_heading_template = frappe.get_hooks('blogs_page_heading_template') or '',
-		featured_doc = get_featured_doc(),
-		background_image = frappe.db.get_single_value('Website Settings', 'blog_header')
+		page_heading_template = frappe.get_hooks('blogs_page_heading_template') or 'website/doctype/blog_post/templates/blog_post_header.html',
+		featured_blog = get_featured_doc(website_settings),
+		background_image = website_settings.blog_header
 	)
 
 	category = sanitize_html(frappe.local.form_dict.blog_category or frappe.local.form_dict.category)
@@ -128,9 +129,8 @@ def get_list_context(context=None):
 	list_context.update(frappe.get_doc("Blog Settings", "Blog Settings").as_dict(no_default_fields=True))
 	return list_context
 
-def get_featured_doc():
-	featured = frappe.db.get_single_value('Website Settings', 'featured_blog')
-	featured_doc = frappe.get_doc("Blog Post", featured)
+def get_featured_doc(website_settings):
+	featured_doc = frappe.get_doc("Blog Post", website_settings.get("featured_blog"))
 	return featured_doc
 
 def get_children():
