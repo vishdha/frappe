@@ -100,7 +100,9 @@ def get_list_context(context=None):
 		children = get_children(),
 		# show_search = True,
 		title = _('Blog'),
-		page_heading_template = frappe.get_hooks('blogs_page_heading_template') or ''
+		page_heading_template = frappe.get_hooks('blogs_page_heading_template') or '',
+		featured_doc = get_featured_doc(),
+		background_image = frappe.db.get_single_value('Website Settings', 'blog_header')
 	)
 
 	category = sanitize_html(frappe.local.form_dict.blog_category or frappe.local.form_dict.category)
@@ -126,10 +128,10 @@ def get_list_context(context=None):
 	list_context.update(frappe.get_doc("Blog Settings", "Blog Settings").as_dict(no_default_fields=True))
 	return list_context
 
-def get_featured():
+def get_featured_doc():
 	featured = frappe.db.get_single_value('Website Settings', 'featured_blog')
 	featured_doc = frappe.get_doc("Blog Post", featured)
-	return featured_doc.name
+	return featured_doc
 
 def get_children():
 	return frappe.db.sql("""select route as name,
@@ -211,7 +213,5 @@ def get_blog_list(doctype, txt=None, filters=None, limit_start=0, limit_page_len
 
 		if post.avatar and (not "http:" in post.avatar and not "https:" in post.avatar) and not post.avatar.startswith("/"):
 			post.avatar = "/" + post.avatar
-
-			post.featured_doc = get_featured()
 
 	return posts
