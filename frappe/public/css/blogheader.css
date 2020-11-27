@@ -11,11 +11,11 @@ body[data-path="blog"] .page-header, body[data-path="blog"] .page-breadcrumbs, b
 }
 
 header.header {
-  margin-right: calc(-50vw + 50%);
-  margin-left: calc(-50vw + 50%);
+  margin-right: calc(50% - 50vw);
+  margin-left: calc(50% - 50vw);
   margin-bottom: 4.375rem;
   background-size: cover;
-  padding-top: 11.0625rem;
+  padding-top: 11.06rem;
   padding-bottom: 11.75rem;
 }
 
