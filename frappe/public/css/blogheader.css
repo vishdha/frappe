@@ -1,4 +1,6 @@
-body[data-path="blog"] .page-header, body[data-path="blog"] .page-breadcrumbs, body[data-path="blog"] .page_content>p {
+body[data-path="blog"] .page-header,
+body[data-path="blog"] .page-breadcrumbs,
+body[data-path="blog"] .page_content > p {
   display: none;
 }
 
@@ -20,21 +22,21 @@ header.header {
 }
 
 header .header-info p {
-  color: #C7C7C7;
+  color: #c7c7c7;
   font-size: 14px;
   line-height: 17px;
   margin-bottom: 5px;
 }
 
 header .header-info h2 {
-  color: #FFFFFF;
+  color: #fff;
   font-size: 32px;
   line-height: 39px;
   max-width: 410px;
 }
 
 header .header-info a {
-  color: #FFFFFF;
+  color: #fff;
   text-decoration: none;
   text-transform: capitalize;
 }

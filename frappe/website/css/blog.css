@@ -21,7 +21,9 @@ img.image {
   display: block;
 }
 
-.detail, p.detail a, .blogger-detail a {
+.detail,
+p.detail a,
+.blogger-detail a {
   font-size: 16px;
   line-height: 22px;
   margin-bottom: 0;
