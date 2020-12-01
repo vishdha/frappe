@@ -244,10 +244,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 
 	refresh(refresh_header=false) {
 		this.freeze(true);
-		// fetch data from server
-		return frappe.call(this.get_call_args()).then(r => {
-			// render
-			this.prepare_data(r);
+		super.refresh().then(() => {
 			this.toggle_result_area();
 			this.before_render();
 			this.render_header(refresh_header);
@@ -517,29 +514,31 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 
 	get_header_html() {
 		const subject_field = this.columns[0].df;
-		let subject_html = `
-			<input class="level-item list-check-all hidden-xs" type="checkbox" title="${__("Select All")}">
-			<span class="level-item list-liked-by-me">
-				<i class="octicon octicon-heart text-extra-muted" title="${__("Likes")}"></i>
-			</span>
-			<span class="level-item">${__(subject_field.label)}</span>
-		`;
-		const $columns = this.columns.map(col => {
-			let classes = [
-				'list-row-col ellipsis',
-				col.type == 'Subject' ? 'list-subject level' : 'hidden-xs',
-				frappe.model.is_numeric_field(col.df) ? 'text-right' : ''
-			].join(' ');
-
-			return `
-				<div class="${classes}">
-					${col.type === 'Subject' ? subject_html : `
-					<span>${__(col.df && col.df.label || col.type)}</span>`}
-				</div>
+		if (subject_field) {
+			let subject_html = `
+				<input class="level-item list-check-all hidden-xs" type="checkbox" title="${__("Select All")}">
+				<span class="level-item list-liked-by-me">
+					<i class="octicon octicon-heart text-extra-muted" title="${__("Likes")}"></i>
+				</span>
+				<span class="level-item">${__(subject_field.label)}</span>
 			`;
-		}).join('');
+			const $columns = this.columns.map(col => {
+				let classes = [
+					'list-row-col ellipsis',
+					col.type == 'Subject' ? 'list-subject level' : 'hidden-xs',
+					frappe.model.is_numeric_field(col.df) ? 'text-right' : ''
+				].join(' ');
 
-		return this.get_header_html_skeleton($columns, '<span class="list-count"></span>');
+				return `
+					<div class="${classes}">
+						${col.type === 'Subject' ? subject_html : `
+						<span>${__(col.df && col.df.label || col.type)}</span>`}
+					</div>
+				`;
+			}).join('');
+
+			return this.get_header_html_skeleton($columns, '<span class="list-count"></span>');
+		}
 	}
 
 	get_header_html_skeleton(left = '', right = '') {
