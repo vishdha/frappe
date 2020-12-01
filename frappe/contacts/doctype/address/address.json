@@ -37,7 +37,8 @@
   {
    "fieldname": "address_title",
    "fieldtype": "Data",
-   "label": "Address Title"
+   "label": "Address Title",
+   "reqd": 0
   },
   {
    "fieldname": "address_type",
@@ -108,7 +109,8 @@
   {
    "fieldname": "phone",
    "fieldtype": "Data",
-   "label": "Phone"
+   "label": "Phone",
+   "reqd": 1
   },
   {
    "fieldname": "fax",
@@ -160,8 +162,8 @@
  ],
  "icon": "fa fa-map-marker",
  "idx": 5,
- "modified": "2020-11-27 03:34:40.212734",
- "modified_by": "himanshu@bloomstack.com",
+ "modified": "2020-12-01 01:27:15.631692",
+ "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Address",
  "name_case": "Title Case",
