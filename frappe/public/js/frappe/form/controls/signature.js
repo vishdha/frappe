@@ -65,7 +65,6 @@ frappe.ui.form.ControlSignature = frappe.ui.form.ControlData.extend({
 			allow_multiple: false,
 			on_success: file => {
 				me.on_upload_complete(file);
-				console.log("file", file)
 			}
 		};
 
@@ -81,7 +80,7 @@ frappe.ui.form.ControlSignature = frappe.ui.form.ControlData.extend({
 	},
 	on_upload_complete: function(attachment) {
 		var me=this;
-		if(this.frm) {
+		if (this.frm) {
 			this.frm.attachments.update_attachment(attachment);
 			this.frm.doc.docstatus == 1 ? this.frm.save('Update') : this.frm.save();
 		}
@@ -91,11 +90,10 @@ frappe.ui.form.ControlSignature = frappe.ui.form.ControlData.extend({
 				path: attachment.file_url
 			},
 			callback: function (r) {
-				console.log("r.message", r.message)
 				me.set_my_value(r.message);
 				me.set_image(this.get_value());
 			}
-		})
+		});
 	},
 	refresh_input: function(e) {
 		// prevent to load the second time
