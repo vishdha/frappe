@@ -44,7 +44,58 @@ frappe.ui.form.ControlSignature = frappe.ui.form.ControlData.extend({
 					return false;
 				});
 
+			this.$reset_attach_wrapper = $(`<div class="signature-attach-btn-row">
+				<a href="#" type="button" class="signature-attach btn btn-default">
+				<i class="glyphicon glyphicon-link"></i></a>`)
+				.appendTo(this.$pad)
+				.on("click", '.signature-attach', () => {
+					this.make_attachments();
+					return false;
+				});
+
 		}
+	},
+	make_attachments: function() {
+		this.set_upload_options();
+		new frappe.ui.FileUploader(this.upload_options);
+	},
+	set_upload_options() {
+		var me = this;
+		let options = {
+			allow_multiple: false,
+			on_success: file => {
+				me.on_upload_complete(file);
+				console.log("file", file)
+			}
+		};
+
+		if (this.frm) {
+			options.doctype = this.frm.doctype;
+			options.docname = this.frm.docname;
+		}
+
+		if (this.df.options) {
+			Object.assign(options, this.df.options);
+		}
+		this.upload_options = options;
+	},
+	on_upload_complete: function(attachment) {
+		var me=this;
+		if(this.frm) {
+			this.frm.attachments.update_attachment(attachment);
+			this.frm.doc.docstatus == 1 ? this.frm.save('Update') : this.frm.save();
+		}
+		frappe.call({
+			method: "frappe.utils.image.image_to_base64",
+			args: {
+				path: attachment.file_url
+			},
+			callback: function (r) {
+				console.log("r.message", r.message)
+				me.set_my_value(r.message);
+				me.set_image(this.get_value());
+			}
+		})
 	},
 	refresh_input: function(e) {
 		// prevent to load the second time
@@ -97,9 +148,11 @@ frappe.ui.form.ControlSignature = frappe.ui.form.ControlData.extend({
 			this.$reset_button_wrapper.toggle(editable);
 			if (editable) {
 				this.$reset_button_wrapper.addClass('editing');
+				this.$reset_attach_wrapper.addClass('editing');
 			}
 			else {
 				this.$reset_button_wrapper.removeClass('editing');
+				this.$reset_attach_wrapper.addClass('editing');
 			}
 		}
 	},
