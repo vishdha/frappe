@@ -45,7 +45,6 @@ export default class WebFormList {
 				col.classList.add('col', 'col-sm-3')
 				filter_area.appendChild(col)
 				if (field.default) this.add_filter(field.fieldname, field.default, field.fieldtype, false);
-
 				let input = frappe.ui.form.make_control({
 					df: {
 						fieldtype: field.fieldtype,
