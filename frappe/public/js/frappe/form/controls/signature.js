@@ -56,10 +56,9 @@ frappe.ui.form.ControlSignature = frappe.ui.form.ControlData.extend({
 		}
 	},
 	make_attachments: function() {
-		this.set_upload_options();
-		new frappe.ui.FileUploader(this.upload_options);
+		new frappe.ui.FileUploader(this.get_upload_options());
 	},
-	set_upload_options() {
+	get_upload_options() {
 		var me = this;
 		let options = {
 			allow_multiple: false,
@@ -76,7 +75,7 @@ frappe.ui.form.ControlSignature = frappe.ui.form.ControlData.extend({
 		if (this.df.options) {
 			Object.assign(options, this.df.options);
 		}
-		this.upload_options = options;
+		return options;
 	},
 	on_upload_complete: function(attachment) {
 		var me=this;
