@@ -68,7 +68,7 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 		}
 	},
 	set_formatted_input: function (value) {
-		this._super()
+		this._super();
 		let doctype = this.get_options();
 		if (value) {
 			if (this.label) {
