@@ -214,22 +214,14 @@ def save_filters(board_name, filters):
 @frappe.whitelist()
 def on_submit_kanban_dialog(docname, doctype, values):
 	"""To update and save kanban card from dialog box !"""
-	value = json.loads(values)
-	task_doc = frappe.get_doc(doctype, docname)
-	keys = value.keys()
-	updates = {}
-	args = {}
-
-	for key in keys:
-		if key in "assign_to":
-			for assignee in value[key]:
-				args = {
-					'doctype': doctype,
-					'name': docname,
-					'assign_to': assignee,
-				}
-				add(args)
-			continue
-		updates.update({key: value[key]})
-	task_doc.update(updates)
-	task_doc.save()
+	values = json.loads(values)
+	doc = frappe.get_doc(doctype, docname)
+	assignees = values.pop("assign_to")
+	args = {
+		"doctype": doctype,
+		"name": docname,
+		"assign_to": assignees
+	}
+	add(args)
+	doc.update(values)
+	doc.save()
