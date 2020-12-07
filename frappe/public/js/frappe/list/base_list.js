@@ -661,6 +661,13 @@ frappe.ui.FilterArea = class FilterArea {
 
 	make_custom_filters() {
 		let fields = JSON.parse(this.list_view.list_view_settings.filters);
+		fields.unshift({
+			doctype: this.list_view.doctype,
+			fieldtype: 'Data',
+			label: 'Name',
+			condition: 'like',
+			fieldname: 'name'
+		});
 
 		fields.forEach(field => {
 			field.onchange = () => this.refresh_list_view();
@@ -672,11 +679,6 @@ frappe.ui.FilterArea = class FilterArea {
 	get_standard_filters() {
 		const filters = [];
 		const fields_dict = this.list_view.page.fields_dict;
-		let doc_type = "";
-		for (let key in fields_dict) {
-			if (fields_dict[key].df.doctype)
-				doc_type = fields_dict[key].df.doctype;
-		}
 
 		for (let key in fields_dict) {
 			let field = fields_dict[key];
@@ -686,7 +688,7 @@ frappe.ui.FilterArea = class FilterArea {
 					value = '%' + value + '%';
 				}
 				filters.push([
-					doc_type,
+					this.list_view.doctype,
 					field.df.fieldname,
 					field.df.condition || '=',
 					value
