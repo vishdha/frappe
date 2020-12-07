@@ -643,7 +643,7 @@ frappe.ui.FilterArea = class FilterArea {
 				default_value = null;
 			}
 			return {
-				doctype: this.list_view.meta.name,
+				doctype: this.list_view.doctype,
 				fieldtype: fieldtype,
 				label: __(df.label),
 				options: options,
@@ -661,14 +661,6 @@ frappe.ui.FilterArea = class FilterArea {
 
 	make_custom_filters() {
 		let fields = JSON.parse(this.list_view.list_view_settings.filters);
-		fields.unshift({
-			doctype: this.list_view.doctype,
-			fieldtype: 'Data',
-			label: 'Name',
-			condition: 'like',
-			fieldname: 'name'
-		});
-
 		fields.forEach(field => {
 			field.onchange = () => this.refresh_list_view();
 		});
@@ -716,7 +708,7 @@ frappe.ui.FilterArea = class FilterArea {
 	}
 
 	has_custom_filters_config() {
-		if (this.list_view.list_view_settings && this.list_view.list_view_settings.filters) {
+		if (this.list_view.list_view_settings && this.list_view.list_view_settings.filters && JSON.parse(this.list_view.list_view_settings.filters).length) {
 			return true;
 		}
 
