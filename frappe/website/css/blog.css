@@ -11,6 +11,15 @@ img.image {
   margin-bottom: 3.75rem;
 }
 
+.detail,
+p.detail a,
+.blogger-detail a {
+  font-size: 16px;
+  line-height: 22px;
+  margin-bottom: 0;
+  color: #36414c;
+}
+
 .result .text a {
   font-size: 19px;
   line-height: 22px;
@@ -21,14 +30,7 @@ img.image {
   display: block;
 }
 
-.detail,
-p.detail a,
-.blogger-detail a {
-  font-size: 16px;
-  line-height: 22px;
-  margin-bottom: 0;
-  color: #36414c;
-}
+
 
 @media screen and (max-width: 767px) {
   img {
