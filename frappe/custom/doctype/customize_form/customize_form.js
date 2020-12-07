@@ -71,6 +71,10 @@ frappe.ui.form.on("Customize Form", {
 
 			if(f.is_custom_field) {
 				data_row.addClass("highlight");
+			} else if (f.fieldtype == "Table") {
+				frm.add_custom_button(f.options, function() {
+					frm.set_value('doc_type', f.options);
+				}, __('Customize Child Table'));
 			} else {
 				f._sortable = false;
 			}
