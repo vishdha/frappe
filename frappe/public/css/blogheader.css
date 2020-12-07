@@ -5,7 +5,7 @@ body[data-path="blog"] .page_content > p {
 }
 
 .container.my-5 {
-  margin-top: 0!important;
+  margin-top: 0 !important;
 }
 
 .website-list .result {
