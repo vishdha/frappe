@@ -1,3 +1,10 @@
+header .header-info p {
+  color: #c7c7c7;
+  font-size: 14px;
+  line-height: 17px;
+  margin-bottom: 5px;
+}
+
 body[data-path="blog"] .page-header,
 body[data-path="blog"] .page-breadcrumbs,
 body[data-path="blog"] .page_content > p {
@@ -5,7 +12,7 @@ body[data-path="blog"] .page_content > p {
 }
 
 .container.my-5 {
-  margin-top: 0!important;
+  margin-top: 0 !important;
 }
 
 .website-list .result {
@@ -19,13 +26,6 @@ header.header {
   background-size: cover;
   padding-top: 11.06rem;
   padding-bottom: 11.75rem;
-}
-
-header .header-info p {
-  color: #c7c7c7;
-  font-size: 14px;
-  line-height: 17px;
-  margin-bottom: 5px;
 }
 
 header .header-info h2 {
