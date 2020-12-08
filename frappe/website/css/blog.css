@@ -11,8 +11,8 @@ img.image {
   margin-bottom: 3.75rem;
 }
 
+/* csslint ignore:start */
 .detail,
-p.detail a,
 .blogger-detail a {
   font-size: 16px;
   line-height: 22px;
@@ -29,6 +29,8 @@ p.detail a,
   text-overflow: ellipsis;
   display: block;
 }
+
+/* csslint ignore:end */
 
 @media screen and (max-width: 767px) {
   img {
