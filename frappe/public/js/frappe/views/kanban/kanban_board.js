@@ -845,7 +845,7 @@ frappe.ui.kanbanForm = class {
 
 			// Escape field type "Table MultiSelects" and "Table"
 			this.meta.fields.forEach(field => {
-				if (field.fieldtype != "Table MultiSelects" && field.fieldtype != "Table") {
+				if (field.fieldtype != "Table MultiSelect" && field.fieldtype != "Table") {
 					this.fields.push(field);
 				}
 			});
@@ -876,7 +876,7 @@ frappe.ui.kanbanForm = class {
 		 */
 		let me = this;
 		let d = new frappe.ui.Dialog({
-			title: 'Enter details',
+			title: __("{0}: {1}", [this.doctype, this.docname]),
 			fields: this.mandatory,
 			primary_action(values) {
 				frappe.call({

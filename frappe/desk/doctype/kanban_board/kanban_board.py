@@ -217,11 +217,10 @@ def on_submit_kanban_dialog(docname, doctype, values):
 	values = json.loads(values)
 	doc = frappe.get_doc(doctype, docname)
 	assignees = values.pop("assign_to")
-	args = {
+	add({
 		"doctype": doctype,
 		"name": docname,
 		"assign_to": assignees
-	}
-	add(args)
+	})
 	doc.update(values)
 	doc.save()
