@@ -70,6 +70,7 @@ frappe.ui.form.ControlSignature = frappe.ui.form.ControlData.extend({
 		if (this.frm) {
 			options.doctype = this.frm.doctype;
 			options.docname = this.frm.docname;
+			options.fieldname = this.df.fieldname;
 		}
 
 		if (this.df.options) {
