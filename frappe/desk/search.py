@@ -9,6 +9,7 @@ from frappe.permissions import has_permission
 from frappe import _
 from six import string_types
 import re
+import wrapt
 
 UNTRANSLATED_DOCTYPES = ["DocType", "Role"]
 
@@ -234,3 +235,14 @@ def get_link_title(doctype, docname):
 		return frappe.get_cached_value(doctype, docname, meta.title_field)
 
 	return docname
+@wrapt.decorator
+def validate_and_sanitize_search_inputs(fn, instance, args, kwargs):
+	kwargs.update(dict(zip(fn.__code__.co_varnames, args)))
+	sanitize_searchfield(kwargs['searchfield'])
+	kwargs['start'] = cint(kwargs['start'])
+	kwargs['page_len'] = cint(kwargs['page_len'])
+
+	if kwargs['doctype'] and not frappe.db.exists('DocType', kwargs['doctype']):
+		return []
+
+	return fn(**kwargs)
