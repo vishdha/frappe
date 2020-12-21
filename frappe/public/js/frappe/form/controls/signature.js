@@ -60,7 +60,7 @@ frappe.ui.form.ControlSignature = frappe.ui.form.ControlData.extend({
 	},
 	get_upload_options() {
 		var me = this;
-		let options = {
+		var options = {
 			allow_multiple: false,
 			on_success: file => {
 				me.on_upload_complete(file);
