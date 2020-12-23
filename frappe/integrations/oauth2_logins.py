@@ -64,10 +64,10 @@ def get_token_for_client(grant_type, client_name, redirect_uri, code):
 	client_id = clients[0].client_id if clients else None
 	if not client_id:
 		return frappe.AuthenticationError
-	newForm = frappe.request.form.to_dict()
-	newForm["client_id"] = client_id
-	newForm = ImmutableMultiDict(newForm)
-	frappe.request.form = newForm
+	form_dict = frappe.request.form.to_dict()
+	form_dict["client_id"] = client_id
+	form_dict = ImmutableMultiDict(form_dict)
+	frappe.request.form = form_dict
 	get_token()
 
 @frappe.whitelist(allow_guest=True)
