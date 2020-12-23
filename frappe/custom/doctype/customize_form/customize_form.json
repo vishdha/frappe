@@ -24,6 +24,11 @@
   "allow_auto_repeat",
   "allow_import",
   "image_view",
+  "column_break_5",
+  "title_field",
+  "show_title_field_in_link",
+  "image_field",
+  "search_fields",
   "section_break_8",
   "sort_field",
   "column_break_10",
@@ -174,6 +179,12 @@
    "fieldname": "allow_import",
    "fieldtype": "Check",
    "label": "Allow Import (via Data Import Tool)"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_title_field_in_link",
+   "fieldtype": "Check",
+   "label": "Show Title in Link and Table MultiSelect Field"
   }
  ],
  "hide_toolbar": 1,
