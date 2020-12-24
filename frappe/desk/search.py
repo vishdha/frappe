@@ -203,9 +203,8 @@ def get_title_field_query(meta):
 def build_for_autosuggest(res, doctype, is_query):
 	results = []
 	for r in res:
-		out = {"value": r[0], "description": ", ".join(unique(cstr(d) for d in r if d)[1:])}
 		r = list(r)
-		if is_query or doctype in (frappe.get_hooks().standard_queries or {}):
+		if doctype in (frappe.get_hooks().standard_queries or {}):
 			out = {
 				"value": r[0],
 				"description": ", ".join(unique(cstr(d) for d in r[1:] if d))
