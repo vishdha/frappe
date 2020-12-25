@@ -55,8 +55,7 @@ def search_link(doctype, txt, query=None, filters=None, page_length=20, searchfi
 
 	search_widget(doctype, txt.strip(), query, searchfield=searchfield, page_length=page_length, filters=filters,
 		reference_doctype=reference_doctype, ignore_user_permissions=ignore_user_permissions)
-	frappe.response["results"] = build_for_autosuggest(frappe.response["values"], doctype=doctype,
-		is_query=True if query else False)
+	frappe.response["results"] = build_for_autosuggest(frappe.response["values"], doctype=doctype)
 	del frappe.response["values"]
 
 # this is called by the search box
@@ -200,7 +199,7 @@ def get_title_field_query(meta):
 
 	return field
 
-def build_for_autosuggest(res, doctype, is_query):
+def build_for_autosuggest(res, doctype):
 	results = []
 	for r in res:
 		r = list(r)
