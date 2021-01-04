@@ -200,10 +200,11 @@ def get_title_field_query(meta):
 	return field
 
 def build_for_autosuggest(res, doctype):
+	meta = frappe.get_meta(doctype)
 	results = []
 	for r in res:
 		r = list(r)
-		if doctype in (frappe.get_hooks().standard_queries or {}):
+		if not (meta.title_field and meta.show_title_field_in_link) or doctype in (frappe.get_hooks().standard_queries or {}):
 			out = {
 				"value": r[0],
 				"description": ", ".join(unique(cstr(d) for d in r[1:] if d))
@@ -233,6 +234,7 @@ def get_link_title(doctype, docname):
 		return frappe.get_cached_value(doctype, docname, meta.title_field)
 
 	return docname
+
 @wrapt.decorator
 def validate_and_sanitize_search_inputs(fn, instance, args, kwargs):
 	kwargs.update(dict(zip(fn.__code__.co_varnames, args)))
