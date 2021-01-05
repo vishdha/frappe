@@ -107,7 +107,7 @@ export default class WebFormList {
 				web_form_name: this.web_form_name,
 				...this.filters
 			}
-		})
+		});
 	}
 
 	async get_data() {
