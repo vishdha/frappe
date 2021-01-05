@@ -7,10 +7,16 @@ export default class WebFormList {
 		Object.assign(this, opts);
 		frappe.web_form_list = this;
 		this.wrapper = document.getElementById("datatable");
-		this.refresh();
-		this.make_actions();
-		this.make_filters();
-		$('.link-btn').remove()
+		this.make();
+	}
+
+	make() {
+		frappe.run_serially([
+			() => this.make_actions(),
+			() => this.make_filters(),
+			() => $('.link-btn').remove(),
+			() => this.refresh()
+		]);
 	}
 
 	refresh() {
@@ -36,7 +42,7 @@ export default class WebFormList {
 		this.filter_input = []
 		const filter_area = document.getElementById('list-filters');
 
-		frappe.call('frappe.website.doctype.web_form.web_form.get_web_form_filters', {
+		return frappe.call('frappe.website.doctype.web_form.web_form.get_web_form_filters', {
 			web_form_name: this.web_form_name
 		}).then(response => {
 			let fields = response.message;
@@ -101,7 +107,7 @@ export default class WebFormList {
 				web_form_name: this.web_form_name,
 				...this.filters
 			}
-		});
+		})
 	}
 
 	async get_data() {
