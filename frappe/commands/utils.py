@@ -496,7 +496,7 @@ def run_tests(context, app=None, module=None, doctype=None, test=(),
 		cov = Coverage(source=[source_path], omit=['*.html', '*.js', '*.xml', '*.css', '*/doctype/*/*_dashboard.py', '*/patches/*'])
 		cov.start()
 
-	ret = frappe.test_runner.main(app, module, doctype, context.verbose, tests=tests,
+	ret = frappe.test_runner.main(app, module, doctype, True, tests=tests,
 		force=context.force, profile=profile, junit_xml_output=junit_xml_output,
 		ui_tests = ui_tests, doctype_list_path = doctype_list_path, failfast=failfast)
 
