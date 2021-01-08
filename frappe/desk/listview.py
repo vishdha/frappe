@@ -7,9 +7,10 @@ import frappe
 @frappe.whitelist()
 def get_list_settings(doctype):
 	try:
-		return frappe.get_cached_doc("List View Settings", doctype)
+		return frappe.get_cached_doc("List View Settings", doctype).as_dict()
 	except frappe.DoesNotExistError:
 		frappe.clear_messages()
+		return {}
 
 @frappe.whitelist()
 def set_list_settings(doctype, values):

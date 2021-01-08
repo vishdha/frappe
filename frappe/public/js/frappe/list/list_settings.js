@@ -53,6 +53,7 @@ export default class ListSettings {
 					}
 				},
 				callback: function (r) {
+					frappe.model.user_list_settings.update(me.doctype, values)
 					me.listview.refresh_fields(r.message.meta, r.message.listview_settings);
 					me.dialog.hide();
 				}

@@ -1,4 +1,5 @@
 frappe.provide('frappe.model.user_settings');
+frappe.provide('frappe.model.user_list_settings');
 
 $.extend(frappe.model.user_settings, {
 	get: function(doctype) {
@@ -44,8 +45,22 @@ $.extend(frappe.model.user_settings, {
 	}
 });
 
+$.extend(frappe.model.user_list_settings, {
+	update: function(doctype, user_list_settings) {
+		frappe.model.user_list_settings[doctype] = user_list_settings;
+	}
+})
+
 frappe.get_user_settings = function(doctype, key) {
 	var settings = frappe.model.user_settings[doctype] || {};
+	if(key) {
+		settings = settings[key] || {};
+	}
+	return settings;
+}
+
+frappe.get_user_list_settings = function(doctype, key) {
+	var settings = frappe.model.user_list_settings[doctype] || {};
 	if(key) {
 		settings = settings[key] || {};
 	}
