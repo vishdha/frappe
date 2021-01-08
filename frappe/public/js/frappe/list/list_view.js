@@ -57,19 +57,22 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		this.sort_order = this.view_user_settings.sort_order || 'desc';
 		this.list_view_settings = this.user_list_settings;
 
-		// set filters from user_settings or list_settings
-		if (this.view_user_settings.filters && this.view_user_settings.filters.length) {
-			// Priority 1: user_settings
-			const saved_filters = this.view_user_settings.filters;
-			this.filters = this.validate_filters(saved_filters);
-		} else {
-			// Priority 2: filters in listview_settings
-			this.filters = (this.settings.filters || []).map(f => {
-				if (f.length === 3) {
-					f = [this.doctype, f[0], f[1], f[2]];
-				}
-				return f;
-			});
+		let ignore_user_default_filters = this.settings.ignore_user_default_filters || false;
+		if (!ignore_user_default_filters) {
+			// set filters from user_settings or list_settings
+			if (this.view_user_settings.filters && this.view_user_settings.filters.length) {
+				// Priority 1: user_settings
+				const saved_filters = this.view_user_settings.filters;
+				this.filters = this.validate_filters(saved_filters);
+			} else {
+				// Priority 2: filters in listview_settings
+				this.filters = (this.settings.filters || []).map(f => {
+					if (f.length === 3) {
+						f = [this.doctype, f[0], f[1], f[2]];
+					}
+					return f;
+				});
+			}
 		}
 
 		// build menu items
