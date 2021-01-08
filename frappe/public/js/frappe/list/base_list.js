@@ -659,7 +659,7 @@ frappe.ui.FilterArea = class FilterArea {
 		}));
 
 		fields.forEach(df => {
-			if (me.list_view.user_list_settings.disable_autofill_for_fillters) {
+			if (me.list_view.user_list_settings.disable_autofill_for_filters) {
 				df.default = null
 			}
 
@@ -675,7 +675,7 @@ frappe.ui.FilterArea = class FilterArea {
 		});
 
 		fields.forEach(df => {
-			if (me.list_view.user_list_settings.disable_autofill_for_fillters) {
+			if (me.list_view.user_list_settings.disable_autofill_for_filters) {
 				df.default = null
 			}
 
