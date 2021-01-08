@@ -38,6 +38,7 @@ frappe.views.BaseList = class BaseList {
 		this.meta = frappe.get_meta(this.doctype);
 		this.settings = frappe.listview_settings[this.doctype] || {};
 		this.user_settings = frappe.get_user_settings(this.doctype);
+		this.user_list_settings = frappe.get_user_list_settings(this.doctype);
 
 		this.start = 0;
 		this.page_length = 20;
@@ -600,6 +601,7 @@ frappe.ui.FilterArea = class FilterArea {
 	}
 
 	make_standard_filters() {
+		let me = this;
 		let fields = [
 			{
 				fieldtype: 'Data',
@@ -638,7 +640,10 @@ frappe.ui.FilterArea = class FilterArea {
 					options = options.join("\n");
 				}
 			}
-
+			let default_value = (fieldtype === 'Link') ? frappe.defaults.get_user_default(options) : null;
+			if (['__default', '__global'].includes(default_value)) {
+				default_value = null;
+			}
 			return {
 				doctype: this.list_view.doctype,
 				fieldtype: fieldtype,
@@ -646,23 +651,36 @@ frappe.ui.FilterArea = class FilterArea {
 				options: options,
 				fieldname: df.fieldname,
 				condition: condition,
-				default: null,
+				default: default_value,
 				onchange: () => this.refresh_list_view(),
 				ignore_link_validation: fieldtype === 'Dynamic Link',
 				is_filter: 1,
 			};
 		}));
 
-		fields.map(df => this.list_view.page.add_field(df));
+		fields.forEach(df => {
+			if (me.list_view.user_list_settings.disable_autofill_for_filters) {
+				df.default = null
+			}
+
+			this.list_view.page.add_field(df)
+		});
 	}
 
 	make_custom_filters() {
+		let me = this;
 		let fields = JSON.parse(this.list_view.list_view_settings.filters);
 		fields.forEach(field => {
 			field.onchange = () => this.refresh_list_view();
 		});
 
-		fields.map(df => this.list_view.page.add_field(df));
+		fields.forEach(df => {
+			if (me.list_view.user_list_settings.disable_autofill_for_filters) {
+				df.default = null
+			}
+
+			this.list_view.page.add_field(df)
+		});
 	}
 
 	get_standard_filters() {
