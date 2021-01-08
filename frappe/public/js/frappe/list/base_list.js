@@ -468,10 +468,6 @@ frappe.ui.FilterArea = class FilterArea {
 	}
 
 	get() {
-		if (this.list_view.user_list_settings.disable_autofill_for_fillters) {
-			return []
-		}
-
 		let filters = this.filter_list.get_filters();
 		let standard_filters = this.get_standard_filters();
 
