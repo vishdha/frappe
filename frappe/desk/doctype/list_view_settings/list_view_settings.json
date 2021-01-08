@@ -78,13 +78,13 @@
    "label": "Filters"
   },
   {
-   "default": "1",
+   "default": "0",
    "fieldname": "disable_autofill_for_fillters",
    "fieldtype": "Check",
    "label": "Disable Autofill for Fillters"
   }
  ],
- "modified": "2021-01-08 07:17:44.155458",
+ "modified": "2021-01-08 12:48:44.727791",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "List View Settings",
