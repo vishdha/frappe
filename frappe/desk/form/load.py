@@ -12,6 +12,7 @@ from frappe.permissions import get_doc_permissions
 from frappe.desk.form.document_follow import is_document_followed
 from frappe import _
 from six.moves.urllib.parse import quote
+from frappe.desk.listview import get_list_settings
 
 @frappe.whitelist()
 def getdoc(doctype, name, user=None):
@@ -71,6 +72,7 @@ def getdoctype(doctype, with_parent=False, cached_timestamp=None):
 		docs = get_meta_bundle(doctype)
 
 	frappe.response['user_settings'] = get_user_settings(parent_dt or doctype)
+	frappe.response['user_list_settings'] = get_list_settings(parent_dt or doctype)
 
 	if cached_timestamp and docs[0].modified == cached_timestamp:
 		return "use_cache"

@@ -53,6 +53,7 @@ export default class ListSettings {
 					}
 				},
 				callback: function (r) {
+					frappe.model.user_list_settings.update(me.doctype, values)
 					me.listview.refresh_fields(r.message.meta, r.message.listview_settings);
 					me.dialog.hide();
 				}
@@ -406,7 +407,7 @@ export default class ListSettings {
 			frappe.model.with_doctype(doctype, () => {
 				values[doctype].forEach(field => {
 					let meta = frappe.get_meta(doctype);
-					let df = frappe.meta.get_docfield(doctype, field);
+					let df = field === "name" ? me.get_name_field_df() : frappe.meta.get_docfield(doctype, field);
 					let label = meta.istable ? __("{0} ({1})", [df.label, doctype]) : __(df.label);
 					let options = df.options;
 					let condition = '=';
@@ -460,7 +461,7 @@ export default class ListSettings {
 				fieldtype: 'MultiCheck',
 				fieldname: meta.name,
 				columns: 2,
-				options: me.get_doctype_fields(meta, active_fields[meta.name])
+				options: me.get_doctype_fields(meta, active_fields[meta.name], true)
 			}
 		];
 
@@ -485,8 +486,16 @@ export default class ListSettings {
 		return fields;
 	}
 
-	get_doctype_fields(meta, fields) {
+	get_doctype_fields(meta, fields, include_name_field=false) {
 		let multiselect_fields = [];
+
+		if (include_name_field) {
+			multiselect_fields.push({
+				label: 'Name',
+				value: 'name',
+				checked: false
+			});
+		}
 
 		meta.fields.forEach(field => {
 			if (!in_list(frappe.model.no_value_type, field.fieldtype)) {
@@ -636,5 +645,14 @@ export default class ListSettings {
 		});
 
 		return removed;
+	}
+
+	get_name_field_df() {
+		return {
+			fieldtype: 'Data',
+			label: 'Name',
+			condition: 'like',
+			fieldname: 'name',
+		}
 	}
 }

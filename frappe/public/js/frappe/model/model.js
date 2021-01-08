@@ -143,6 +143,13 @@ $.extend(frappe.model, {
 						frappe.model.user_settings[doctype] = JSON.parse(r.user_settings);
 						frappe.model.user_settings[doctype].updated_on = moment().toString();
 					}
+
+					if(r.user_list_settings) {
+						// remember user list settings
+						frappe.model.user_list_settings[doctype] = r.user_list_settings;
+						frappe.model.user_list_settings[doctype].updated_on = moment().toString();
+					}
+
 					callback && callback(r);
 				}
 			});
