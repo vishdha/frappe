@@ -8,6 +8,7 @@
   "disable_count",
   "disable_sidebar_stats",
   "disable_auto_refresh",
+  "disable_autofill_for_fillters",
   "listview_fields_section",
   "total_fields",
   "fields_html",
@@ -75,9 +76,15 @@
    "fieldtype": "Code",
    "hidden": 1,
    "label": "Filters"
+  },
+  {
+   "default": "1",
+   "fieldname": "disable_autofill_for_fillters",
+   "fieldtype": "Check",
+   "label": "Disable Autofill for Fillters"
   }
  ],
- "modified": "2020-12-04 06:07:19.594538",
+ "modified": "2021-01-08 07:17:44.155458",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "List View Settings",
