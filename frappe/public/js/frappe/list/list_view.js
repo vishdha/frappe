@@ -55,46 +55,30 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		// initialize with saved order by
 		this.sort_by = this.view_user_settings.sort_by || 'modified';
 		this.sort_order = this.view_user_settings.sort_order || 'desc';
+		this.list_view_settings = this.user_list_settings;
 
-		// set filters from user_settings or list_settings
-		if (this.view_user_settings.filters && this.view_user_settings.filters.length) {
-			// Priority 1: user_settings
-			const saved_filters = this.view_user_settings.filters;
-			this.filters = this.validate_filters(saved_filters);
-		} else {
-			// Priority 2: filters in listview_settings
-			this.filters = (this.settings.filters || []).map(f => {
-				if (f.length === 3) {
-					f = [this.doctype, f[0], f[1], f[2]];
-				}
-				return f;
-			});
+		let ignore_user_default_filters = this.settings.ignore_user_default_filters || false;
+		if (!ignore_user_default_filters) {
+			// set filters from user_settings or list_settings
+			if (this.view_user_settings.filters && this.view_user_settings.filters.length) {
+				// Priority 1: user_settings
+				const saved_filters = this.view_user_settings.filters;
+				this.filters = this.validate_filters(saved_filters);
+			} else {
+				// Priority 2: filters in listview_settings
+				this.filters = (this.settings.filters || []).map(f => {
+					if (f.length === 3) {
+						f = [this.doctype, f[0], f[1], f[2]];
+					}
+					return f;
+				});
+			}
 		}
 
 		// build menu items
 		this.menu_items = this.menu_items.concat(this.get_menu_items());
 
-		if (this.view_user_settings.filters && this.view_user_settings.filters.length) {
-			// Priority 1: saved filters
-			const saved_filters = this.view_user_settings.filters;
-			this.filters = this.validate_filters(saved_filters);
-		} else {
-			// Priority 2: filters in listview_settings
-			this.filters = (this.settings.filters || []).map(f => {
-				if (f.length === 3) {
-					f = [this.doctype, f[0], f[1], f[2]];
-				}
-				return f;
-			});
-		}
-
-		this.patch_refresh_and_load_lib();
-		return this.get_list_view_settings();
-	}
-
-	get_list_view_settings() {
-		return frappe.call("frappe.desk.listview.get_list_settings", {doctype: this.doctype})
-			.then(doc => this.list_view_settings = doc.message || {});
+		return this.patch_refresh_and_load_lib();
 	}
 
 	on_sort_change(sort_by, sort_order) {
@@ -236,7 +220,8 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 
 	refresh_fields(meta, list_view_settings) {
 		this.meta = meta;
-		this.list_view_settings = list_view_settings;
+		this.list_view_settings = this.user_list_settings = list_view_settings;
+
 
 		this.filter_area.setup(true);
 		this.setup_columns();
@@ -514,7 +499,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	}
 
 	get_header_html() {
-		const subject_field = this.columns[0].df;
+		const subject_field = this.columns && this.columns[0].df;
 		if (subject_field) {
 			let subject_html = `
 				<input class="level-item list-check-all hidden-xs" type="checkbox" title="${__("Select All")}">
