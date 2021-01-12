@@ -55,8 +55,7 @@ def search_link(doctype, txt, query=None, filters=None, page_length=20, searchfi
 
 	search_widget(doctype, txt.strip(), query, searchfield=searchfield, page_length=page_length, filters=filters,
 		reference_doctype=reference_doctype, ignore_user_permissions=ignore_user_permissions)
-	frappe.response["results"] = build_for_autosuggest(frappe.response["values"], doctype=doctype,
-		is_query=True if query else False)
+	frappe.response["results"] = build_for_autosuggest(frappe.response["values"], doctype=doctype)
 	del frappe.response["values"]
 
 # this is called by the search box
@@ -200,12 +199,12 @@ def get_title_field_query(meta):
 
 	return field
 
-def build_for_autosuggest(res, doctype, is_query):
+def build_for_autosuggest(res, doctype):
+	meta = frappe.get_meta(doctype)
 	results = []
 	for r in res:
-		out = {"value": r[0], "description": ", ".join(unique(cstr(d) for d in r if d)[1:])}
 		r = list(r)
-		if is_query or doctype in (frappe.get_hooks().standard_queries or {}):
+		if not (meta.title_field and meta.show_title_field_in_link) or doctype in (frappe.get_hooks().standard_queries or {}):
 			out = {
 				"value": r[0],
 				"description": ", ".join(unique(cstr(d) for d in r[1:] if d))
@@ -235,6 +234,7 @@ def get_link_title(doctype, docname):
 		return frappe.get_cached_value(doctype, docname, meta.title_field)
 
 	return docname
+
 @wrapt.decorator
 def validate_and_sanitize_search_inputs(fn, instance, args, kwargs):
 	kwargs.update(dict(zip(fn.__code__.co_varnames, args)))
