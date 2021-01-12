@@ -27,21 +27,19 @@ frappe.views.KanbanView = class KanbanView extends frappe.views.ListView {
 	}
 
 	setup_defaults() {
-		return super.setup_defaults()
-			.then(() => {
-				this.board_name = frappe.get_route()[3];
-				this.page_title = this.board_name;
-				this.card_meta = this.get_card_meta();
+		super.setup_defaults()
+		this.board_name = frappe.get_route()[3];
+		this.page_title = this.board_name;
+		this.card_meta = this.get_card_meta();
 
-				this.menu_items.push({
-					label: __('Save filters'),
-					action: () => {
-						this.save_kanban_board_filters();
-					}
-				});
+		this.menu_items.push({
+			label: __('Save filters'),
+			action: () => {
+				this.save_kanban_board_filters();
+			}
+		});
 
-				return this.get_board();
-			});
+		return this.get_board();
 	}
 
 	get_board() {

@@ -6,10 +6,8 @@ frappe.views.DashboardView = class DashboardView extends frappe.views.ListView {
 	}
 
 	setup_defaults() {
-		return super.setup_defaults()
-			.then(() => {
-				this.dashboard_settings = frappe.get_user_settings(this.doctype)['dashboard_settings'] || null;
-			});
+		super.setup_defaults()
+		this.dashboard_settings = frappe.get_user_settings(this.doctype)['dashboard_settings'] || null;
 	}
 
 	render() {

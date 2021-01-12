@@ -499,7 +499,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	}
 
 	get_header_html() {
-		const subject_field = this.columns[0].df;
+		const subject_field = this.columns && this.columns[0].df;
 		if (subject_field) {
 			let subject_html = `
 				<input class="level-item list-check-all hidden-xs" type="checkbox" title="${__("Select All")}">
