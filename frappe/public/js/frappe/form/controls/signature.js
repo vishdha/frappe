@@ -62,38 +62,21 @@ frappe.ui.form.ControlSignature = frappe.ui.form.ControlData.extend({
 		var me = this;
 		var options = {
 			allow_multiple: false,
+			as_dataurl: true,
 			on_success: file => {
 				me.on_upload_complete(file);
 			}
 		};
-
-		if (this.frm && !this.frm.is_new()) {
-			options.doctype = this.frm.doctype;
-			options.docname = this.frm.docname;
-			options.fieldname = this.df.fieldname;
-		}
 
 		if (this.df.options) {
 			Object.assign(options, this.df.options);
 		}
 		return options;
 	},
-	on_upload_complete: function(attachment) {
+	on_upload_complete: function(file) {
 		var me=this;
-		if (this.frm) {
-			this.frm.attachments.update_attachment(attachment);
-			this.frm.doc.docstatus == 1 ? this.frm.save('Update') : this.frm.save();
-		}
-		frappe.call({
-			method: "frappe.utils.image.image_to_base64",
-			args: {
-				path: attachment.file_url
-			},
-			callback: function (r) {
-				me.set_my_value(r.message);
-				me.set_image(me.get_value());
-			}
-		});
+		me.set_my_value(file.dataurl);
+		me.set_image(me.get_value());
 	},
 	refresh_input: function(e) {
 		// prevent to load the second time
